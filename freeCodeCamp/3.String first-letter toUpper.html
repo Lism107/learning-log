@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使字符串每个单词的首字母大写</title>
+</head>
+<body>
+    <script>
+        //运用箭头函数的表达式，正则：以空格加字母的组合 或者是开头就是字母的组合
+        function titleCase (str) {
+            return str.toLowerCase().replace(/( |^)[a-z]/g, (S) => S.toUpperCase());
+        }
+
+        function titleCase2 (str) {
+            return str.toLowerCase().replace(/( |^)[a-z]/g, function(S){
+                return S.toUpperCase();
+            });
+        }
+
+        //检测
+        console.log(titleCase("I'm a little tea pot")); //I'm A Little Tea Pot
+        console.log(titleCase("sHoRt AnD sToUt"));  //Short And Stout
+        console.log(titleCase("HERE IS MY HANDLE HERE IS MY SPOUT"));  //Here Is My Handle Here Is My Spout
+
+        console.log("-----------------------");
+
+        console.log(titleCase2("I'm a little tea pot")); //I'm A Little Tea Pot
+        console.log(titleCase2("sHoRt AnD sToUt"));  //Short And Stout
+        console.log(titleCase2("HERE IS MY HANDLE HERE IS MY SPOUT"));  //Here Is My Handle Here Is My Spout
+    </script>
+</body>
+</html>
