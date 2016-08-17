@@ -41,9 +41,12 @@
 
         var myBike = new Bike();
 
+        console.log(myBike.gear);  //undefined
         myBike.setGear(1);
+        console.log(myBike.getGear());  //1
 
-        console.log(myBike.getGear());
+        myBike.setGear(4);
+        console.log(myBike.getGear());  //5
 
     </script>
 </body>
