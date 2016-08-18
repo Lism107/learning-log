@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>检测数组两个元素中的每个字母是否相同，不区分大小写</title>
+</head>
+<body>
+    <script>
+        //数组 [A,B]，B的字母如果在A中都有，返回true，不区分大小写
+        function mutation(arr) {
+            var arr0 = [],  //存储数组第一个元素的字母数组
+                arr1 = [],  //存储数组第二个元素的字母数组
+                result = true;   //结果值，都相同的话，返回 true
+
+            //分别把两个数组元素转小写，然后分隔成 字母组成的数组
+            arr0 = arr[0].toLowerCase().split('');
+            arr1 = arr[1].toLowerCase().split('');
+
+            //循环，比对 arr[1]的每个字母 在 arr[0] 中的状态
+            for (var i = 0; i < arr1.length; i ++) {
+                //如果在arr[0]中没有返回了-1，就将 result 赋值 false
+                if (arr0.indexOf(arr1[i]) === -1) {
+                    result = false;
+                }
+            }
+            //输出结果
+            return result;
+        }
+
+        console.log(mutation(["hello", "hey"]));  //false
+        console.log(mutation(["zyxwvutsrqponmlkjihgfedcba", "qrstu"]));   //true
+        console.log(mutation(["Mary", "Army"]));  //true
+        console.log(mutation(["floor", "for"]));  //true
+    </script>
+</body>
+</html>
