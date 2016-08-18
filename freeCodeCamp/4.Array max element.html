@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数组中的数组取最大值</title>
+</head>
+<body>
+    <script>
+        function largestOfFour(arr) {
+            //装载最大值的变量
+            var max;
+            //循环第一层数组
+            for (var i = 0; i < arr.length; i ++){
+                //每次循环内部数组的开始,让max归零用于比较
+                max = 0;
+                //循环内部数组
+                for (var j = 0; j < arr[i].length; j ++){
+                    //比较并刷新max
+                    if (arr[i][j] > max) {
+                        max = arr[i][j];
+                    }
+                }
+                //改变数组元素
+                arr[i] = max;
+            }
+            return arr;
+        }
+
+        //验证
+        console.log(largestOfFour([[4, 5, 1, 3], [13, 27, 18, 26], [32, 35, 37, 39], [1000, 1001, 857, 1]]));
+        //[5, 27, 39, 1001]
+        console.log(largestOfFour([[13, 27, 18, 26], [4, 5, 1, 3], [32, 35, 37, 39], [1000, 1001, 857, 1]]));
+        //[27, 5, 39, 1001]
+    </script>
+</body>
+</html>
