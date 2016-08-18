@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>凯撒密码，把字符画的字母按照编码表往后推13位，只在A-Z中循环</title>
+</head>
+<body>
+    <script>
+        //把字符串参数转换成字符编码，加13后再转换回字符串，只在编码65-90的A-Z字符中循环
+        function rot13(str) {
+            //存储字符编码的变量 和 集合数组
+            var count,
+                arr = [];
+            //循环str
+            for (var i = 0; i < str.length; i++) {
+                //把字母编码赋值给 count
+                count = str[i].charCodeAt();
+                //如果 count < 65 （符号编码之类），不改变
+                if (count < 65) {
+                    count = count;
+                } else {
+                    count += 13;
+                    //如果 count + 13 大于90超出字母编码序列，从A再次循环
+                    if (count > 90) {
+                        count = 64 + (count - 90);
+                    }
+                }
+                //编码转换成字符串再次置入数组
+                arr.push(String.fromCharCode(count));
+            }
+            str = arr.join('');
+            return str;
+        }
+
+        console.log(rot13("SERR PBQR PNZC"));  //FREE CODE CAMP
+        console.log(rot13("SERR CVMMN!"));  //FREE PIZZA!
+        console.log(rot13("SERR YBIR?"));  //FREE LOVE?
+        console.log(rot13("GUR DHVPX OEBJA QBT WHZCRQ BIRE GUR YNML SBK."));
+        //THE QUICK BROWN DOG JUMPED OVER THE LAZY FOX.
+
+    </script>
+</body>
+</html>
