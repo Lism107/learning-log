@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax异步请求-瀑布流加载图片</title>
+    <style>
+        body { margin: 0; }
+        #ul1 { width: 1080px; margin: 100px auto 0; overflow: auto;}
+        li { width: 247px; list-style: none; float: left; margin-right: 10px;}
+        li div { border: 1px solid #000; padding: 10px; margin-bottom: 10px;}
+        li div img { width: 225px; display: block;}
+        #loading { text-align: center; padding-bottom: 50px;}
+    </style>
+</head>
+<body>
+    <!--
+    瀑布流
+    每一列的宽度一样，高度不一样
+    数据不是一次性加载，而是分批加载的
+    （固定列/非固定列）
+
+    固定列：li浮动布局，高度为0，ajax请求并添加，分批请求，动态填充到每个li
+    为了让他们的高度相差不会太高，会往li中最短的li上添加
+     -->
+    <ul id="ul1">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <div id="loading"><img src="images/loading.gif"></div>
+    <script src="js/ajax.js"></script>
+    <script>
+        window.onload = function(){
+
+            var oUl = document.getElementById('ul1'),
+                aLi = oUl.getElementsByTagName('li'),
+                iLen = aLi.length,
+                iPage = 1,  //加载页面的页数
+                b = true;  //下拉加载控制
+
+            //初始化数据处理,ajax加载第一页数据
+            getList();
+
+            function getList(){
+
+                ajax('get', 'php/getPics.php', 'cpage=' + iPage, function(data){
+                    //数据解析
+                    var data = JSON.parse(data);
+
+                    //没数据
+                    if (!data.length) {
+                        document.getElementById('loading').innerHTML = '没有更多了';
+                        return;
+                    }
+
+                    for (var i = 0; i < data.length; i++) {
+
+                        //获取高度最短的li
+                        var _index = getShort();
+
+                        var oDiv = document.createElement('div'),
+                            oImg = document.createElement('img'),
+                            oP = document.createElement('p');
+                            //配置图片
+                            oImg.src = data[i].preview;
+                            oImg.style.width = '225px';
+                            oImg.style.height = data[i].height * (225 / data[i].width) + 'px';
+
+                            oDiv.appendChild(oImg);
+
+                            oP.innerHTML = data[i].title;
+                            oDiv.appendChild(oP);
+
+                            aLi[_index].appendChild(oDiv);
+                    }
+
+                    b = true; //完成后
+                });
+            }
+
+            //滚动事件触发
+            window.onscroll = function(){
+                //监控最短的li进入可视区,li的top值小于 滚动条的高+可视区的高
+                var _index = getShort();
+                var oLi = aLi[_index];
+                var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+
+                //当前li的top值 + 自身的高  小于 可视区的高 + 滚动条滚动距离
+                if (getTop(oLi) + oLi.offsetHeight < document.documentElement.clientHeight + scrollTop) {
+
+                    if (b) {
+                        b = false;
+                        iPage++;
+                        getList();
+                    }
+
+                }
+            }
+
+            //找到最短的li
+            function getShort(){
+                //索引
+                var index = 0;
+                //比较值
+                var ih = aLi[index].offsetHeight;
+                for (var i = 0; i < iLen; i++) {
+                    if (aLi[i].offsetHeight < ih) {
+                        index = i;
+                        ih = aLi[i].offsetHeight;
+                    }
+                }
+                return index;
+            }
+            //获取元素到页面的绝对值
+            function getTop(obj){
+                var iTop = 0;
+                while(obj){
+                    iTop += obj.offsetTop;
+                    obj = obj.offsetParent;
+                }
+                return iTop;
+            }
+        }
+    </script>
+</body>
+</html>
